@@ -30,7 +30,7 @@ public class testMain {
             {1, 1, 1, 0, 0, 1, 1, 0, 0, 0}};
      */
 
-    public static final int [][]testBoard = {
+    public static int [][]pestBoard = {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -54,11 +54,12 @@ public class testMain {
 
     public static void main(String[] args) {
 
-        int [][]curentShape = new int[][]{
-                {0,1,0},
-                {1, 1, 1}
 
-        };
+
+        int [][]curentShape = {
+                {0,1,0},
+                {1, 1, 1}};
+        /*
 
 
         for(int row=0;row<curentShape.length;row++){
@@ -81,12 +82,12 @@ public class testMain {
 
 
         }
+        */
 
 
 
-        System.out.println(ai.curentBoard);
-        System.out.println(testShape);
 
+        /*
         List<List<Integer>> okBoard = new ArrayList<>();
         for(int x=0;x<testBoard.length;x++){
             List<Integer> firstLayer = new ArrayList<>();
@@ -98,6 +99,8 @@ public class testMain {
 
         }
 
+         */
+
         //ai.findPossibleMoves(testShape);
         /*
         for(int i =0; i< ai.X.size();i++){
@@ -105,19 +108,19 @@ public class testMain {
             System.out.println(ai.canPlaceShape(testShape, okBoard,ai.X.get(i), ai.Y.get(i)));
         }
 
-         */
+
         //List<List<Integer>> unmodifiable2DArrayList = Collections.unmodifiableList();
 
-        List<List<Integer>> kool = Collections.unmodifiableList(okBoard);
+        //List<List<Integer>> kool = Collections.unmodifiableList(okBoard);
 
         //constant keep = new constant(okBoard);
-        List<List<Integer>> best = ai.getBestBoard(testShape,kool);
+        //List<List<Integer>> best = ai.getBestBoard(testShape,kool);
         for (int r=0;r<best.size();r++){
             System.out.println(best.get(r));
 
         }
 
-        /*
+
 
 
         for(int y=0;y<ai.curentBoard.size();y++){
@@ -155,6 +158,8 @@ public class testMain {
 
 
         // ai.test();
+        System.out.println(pestBoard);
+        ai.startTest(curentShape, ai.testBoard, "T");
 
 
     }

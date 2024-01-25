@@ -6,9 +6,31 @@ import static java.lang.Math.abs;
 public class ai {
 
 
-    public static ArrayList<Double> ratingsForAllBoards = new ArrayList<>();
+    public ArrayList<Double> ratingsForAllBoards = new ArrayList<>();
 
-    public static ArrayList<ArrayList<Integer>> curentBoard = new ArrayList<>();
+    public ArrayList<ArrayList<Integer>> curentBoard = new ArrayList<>();
+
+    public static int [][]testBoard = {
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 1, 1, 0, 0, 0},
+            {1, 1, 1, 0, 0, 1, 1, 0, 0, 0}};
 
 
     public static int[][] curentShape;
@@ -17,6 +39,7 @@ public class ai {
 
     public static ArrayList<Integer> X = new ArrayList<>();
     public static ArrayList<Integer> Y = new ArrayList<>();
+
 
 
     public static void test(){
@@ -33,142 +56,111 @@ public class ai {
             }
         }
     }
+    public static void startTest(int [][]curentShape, int [][]testBoard, String shapeName){
 
+        int rotates =0;
 
-    public static boolean canPlaceShape(ArrayList<ArrayList<Integer>> shape,List<List<Integer>> currentBoard , int x, int y){
-
-        if ((x + shape.get(0).size() > currentBoard.get(0).size()) || (y + shape.size() > currentBoard.size())||x<0||y<0) {
-            return false;
+        switch (shapeName){
+            case "T": rotates =3;break;
+            case "L": rotates = 3;break;
+            case "Z": rotates=1; break;
+            case "S": rotates=1; break;
+            case "I": rotates=1; break;
+            default: rotates=0;break;
         }
 
+        printArray(getBestBoard(curentShape,testBoard));
+
+    }
 
 
-        for (int i = 0; i < shape.size(); i++) {
-            for (int j = 0; j < shape.get(0).size(); j++) {
-                if (shape.get(i).get(j) == 1) {
+    public static boolean canPlaceShape(int[][] shape,int [][]currentBoard , int x, int y){
+
+        if ((x + shape[0].length > currentBoard[0].length) || (y + shape.length > currentBoard.length)||x<0||y<0) {
+            return false;
+        }
+        for (int i = 0; i < shape.length; i++) {
+            for (int j = 0; j < shape[0].length; j++) {
+                if (shape[i][j] == 1) {
                     int boardRow = y + i;
                     int boardCol = x + j;
-
-
-                    if (shape.get(i).get(j) == 1) {
-                        // Check if the board cell is already filled (1).
-                        //if (boardRow >= 0 && boardRow < curentBoard.size() && boardCol >= 0 && boardCol < curentBoard.get(1).size()) {
-                        /*
-                        if (curentBoard.get(boardRow).get(boardCol) == 1) {
-
-                            return false; // Collision with existing piece.
-                        }
-
-                         */
-
-
-
-
-                        if(currentBoard.get(boardRow).get(boardCol)!=0){
+                    if (shape[i][j] == 1) {
+                        if(currentBoard[boardRow][boardCol]!=0){
                             return false;
                         }
-
-
-
-
-
-                        // Check if there is an adjacent filled cell directly beneath this cell.  && shape.get(i).get(j) != 1
-                        // (boardRow + 1 >= 0 && boardRow + 1 < curentBoard.size()&& shape.get(i).get(j) != 1  && curentBoard.get(boardRow + 1).get(boardCol) == 0)
-                        /*
-                        if(boardRow + 1 >= 0 && boardRow + 1 < curentBoard.size()&& shape.get(i).get(j) != 1){
-                            return false;
-                        }
-
-                         */
                     }
-
                 }
             }
         }
 
-        for (int i = 0; i < shape.size(); i++) {
-            for (int j = 0; j < shape.get(0).size(); j++) {
-                if((y+1+i)<currentBoard.size()){
-                    if (currentBoard.get(y + 1+i).get(x+j) == 1) {
+        for (int i = 0; i < shape.length; i++) {
+            for (int j = 0; j < shape[0].length; j++) {
+                if((y+1+i)<currentBoard.length){
+                    if (currentBoard[y + 1+i][x+j] == 1) {
                         return true;
                     }
                 }
-
-
             }
         }
 
-        if((y+shape.size()==20 )&& y+shape.size()<=currentBoard.size()){
+        if((y+shape.length==20 )&& y+shape.length<=currentBoard.length){
             return true;
         }
-
-
-
-
-
-        /*
-
-        for (int j = 0; j < shape.get(shape.size()-1).size(); j++) {
-
-            if ((shape.get(shape.size()-1).get(j) == 1 )&& (curentBoard.get(y+1).get(x + j) == 0)) {
-                return false; //checks if there is a collision or not
-            }
-
-        }
-
-
-
-
-
-        for (int i = 0; i < shape.size(); i++) {
-            for (int j = 0; j < shape.get(0).size(); j++) {
-                if ((shape.get(i).get(j) == 1) && (curentBoard.get(y + i).get(x + j) == 1)) {
-                    return false;
-                }
-            }
-        }
-
-         */
-
 
         return false;
     }
 
+    public static void printArray(int [][] array){
+        for(int x=0;x<array.length;x++){
+            ArrayList<Integer> firstLayer = new ArrayList<>();
+            for(int y =0; y<array[x].length;y++){
+                System.out.print(array[x][y]+" ");
+            }
+            System.out.println("         ");
+        }
+    }
 
 
-    public static List<List<Integer>> placeShape(ArrayList<ArrayList<Integer>> shape, List<List<Integer>> array, int x, int y) {
+    public static int [][] placeShape(int[][] shape, int [][] array, int x, int y) {
 
 
 
 
 
             // Copy the shape into the board at the specified position.
-        for (int i = 0; i < shape.size(); i++) {
-            for (int j = 0; j < shape.get(0).size(); j++) {
-                if (shape.get(i).get(j) == 1) {
+        for (int i = 0; i < shape.length; i++) {
+            for (int j = 0; j < shape[0].length; j++) {
+                if (shape[i][j] == 1) {
                     //temp.get(y + i).set(x + j, 2); //replaces the value at that x and y as 1 for placing the shape
-                    array.get(y+i).set(x+j, 2);
+                    //array.get(y+i).set(x+j, 2);
+                    array[(y+i)][(x+j)] =2;
 
                 }
             }
-
-            /*
-
-            for(int row=0;row<temp.size();row++){
-
-                System.out.println(temp.get(row));
-            }
-            System.out.println("---------------------------------");
-
-             */
+            //printArray(testBoard);
+           // printArray(array);
+            //System.out.println("---------------------------------");
 
         }
         return array;
 
+    }
 
+    public static void removeShape(int[][] shape, int [][] array, int x, int y){
+        for (int i = 0; i < shape.length; i++) {
+            for (int j = 0; j < shape[0].length; j++) {
+                if (shape[i][j] == 1) {
+                    //temp.get(y + i).set(x + j, 2); //replaces the value at that x and y as 1 for placing the shape
+                    //array.get(y+i).set(x+j, 2);
+                    array[(y+i)][(x+j)] =0;
 
+                }
+            }
+            //printArray(testBoard);
+            // printArray(array);
+            //System.out.println("---------------------------------");
 
-
+        }
     }
 
 
@@ -204,7 +196,7 @@ public class ai {
 
          */
     //}
-    public static void copyArray(ArrayList<ArrayList<Integer>> freshArray,ArrayList<ArrayList<Integer>> copyArray){
+    public void copyArray(ArrayList<ArrayList<Integer>> freshArray,ArrayList<ArrayList<Integer>> copyArray){
         freshArray.clear();
         for (int i = 0; i < copyArray.size(); i++) {
             freshArray.add(copyArray.get(i));
@@ -212,17 +204,45 @@ public class ai {
         }
     }
 
-    public static List<List<Integer>> getBestBoard(ArrayList<ArrayList<Integer>> shape, List<List<Integer>> aftercurentBoard) {
+    public static int[][] rotate(int[][] shape){
+        int[][] rotatedShape = transposeMatrix(shape);
+
+        return reverseRows(rotatedShape);
+    }
+    private static int[][] transposeMatrix(int[][] matrix){
+        int [][] temp = new int[matrix[0].length][matrix.length]; // makes the array flip so instead of row col its col row so from 2x3 it turns to 3x2 grid
+        for(int row = 0; row < matrix.length;row++){
+            for(int col = 0; col < matrix[0].length; col++){
+                temp[col][row] = matrix[row][col]; // makes the array flip so instead of row col its col row so from 2x3 it turns to 3x2 grid
+                // {1,1,1} L shape turns to ---->   {1,1}  since this isnt a 90 degree turn we have to reverse the rows to make it that so we need the
+                // {1,0,0}                          {1,0}   reversRows() function
+                //                                  {1,0}
+            }
+        }
+        return temp;
+    }
+    private static int[][] reverseRows(int[][] matrix){
+        int middle = matrix.length /2;
+        for( int row = 0; row <middle;row++){
+            int[] temp = matrix[row];
+            matrix [row] = matrix[matrix.length -row -1];
+            matrix[matrix.length - row - 1] = temp;
+        }
+        return matrix;
+    }
+
+    public static int[][] getBestBoard(int[][] shape, int[][] aftercurent) {
 
 
         double bestScore = -5764767487593567898765678765678976547985789346634756778457543.3;
         ArrayList<Integer> X = new ArrayList<>();
         ArrayList<Integer> Y = new ArrayList<>();
-        for (int y = 0; y < aftercurentBoard.size(); y++) {
-            for (int x = 0; x < aftercurentBoard.get(y).size(); x++) {
+
+        for (int y = 0; y < aftercurent.length; y++) {
+            for (int x = 0; x < aftercurent[0].length; x++) {
 
 
-                if (ai.canPlaceShape(shape, aftercurentBoard, x, y) == true) {
+                if (canPlaceShape(shape, testBoard, x, y) == true) {
                     //double score = (findSmooth(placeShape(shape, aftercurentBoard, x, y))*-0.184483)+(findHoles(placeShape(shape,aftercurentBoard,x,y))*-0.35663)+(findaggregateHeight(placeShape(shape,aftercurentBoard,x,y))*-0.510066)+(findComplete(placeShape(shape,aftercurentBoard,x,y))*0.760666);
                     System.out.println("(" + x + ", " + y + "valid");
                     X.add(x);
@@ -234,6 +254,7 @@ public class ai {
             }
         }
 
+
         System.out.println(X+"\n"+Y);
         ArrayList<ArrayList<Integer>> best = new ArrayList<>();
 
@@ -244,20 +265,32 @@ public class ai {
         //copyArray(placedBoard1, placeShape(shape,aftercurentBoard,X.get(0),Y.get(0)));
 
         //copyArray(keep,aftercurentBoard);
+        printArray(testBoard);
+        int [][]save = testBoard;
         for(int x=0;x<X.size();x++){
 
 
-            if (bestScore<rateBoard(placeShape(shape,aftercurentBoard,X.get(x),Y.get(x)))){
+            if (bestScore<rateBoard(placeShape(shape,testBoard,X.get(x),Y.get(x)))){
 
                 best.clear();
                 Bestx = X.get(x);
                 Besty = Y.get(x);
-                bestScore = rateBoard(placeShape(shape,aftercurentBoard,X.get(x),Y.get(x)));
+                bestScore = rateBoard(placeShape(shape,testBoard,X.get(x),Y.get(x)));
 
             }
-            for (int i=0;i<aftercurentBoard.size();i++){
-                System.out.println(aftercurentBoard.get(i));
+
+
+
+            printArray(placeShape(shape,aftercurent,X.get(x),Y.get(x)));
+            System.out.println(rateBoard(placeShape(shape,aftercurent,X.get(x),Y.get(x))));
+            removeShape(shape,aftercurent,X.get(x),Y.get(x));
+
+            /*
+            for (int i=0;i<aftercurent.size();i++){
+                System.out.println(testBoard);
             }
+
+             */
             System.out.println("----------------------");
 
 
@@ -271,15 +304,25 @@ public class ai {
         System.out.println(bestScore+"\nY: "+Besty+"\nX: "+Bestx);
         //System.out.println(placeShape(shape,curentBoard,Bestx,Besty));
 
-        return placeShape(shape,aftercurentBoard,Bestx,Besty);
+        return placeShape(shape,testBoard,Bestx,Besty);
     }
 
-    public static double rateBoard(final List<List<Integer>> board){
+    public static double rateBoard(int [][]testBoard){
+        ArrayList<ArrayList<Integer>> board= new ArrayList<>();
+        for(int x=0;x<testBoard.length;x++){
+            ArrayList<Integer> firstLayer = new ArrayList<>();
+            for(int y =0; y<testBoard[x].length;y++){
+                firstLayer.add(testBoard[x][y]);
+            }
+            board.add(firstLayer);
+        }
+
+
         double score = (findSmooth(board)*-0.184483)+(findaggregateHeight(board)*-0.510066)+(findHoles(board)*-0.35663)+(findComplete(board)*0.760666);
         return score;
     }
 
-    public static ArrayList<ArrayList<Integer>> invertBoard(List<List<Integer>> temp){
+    public static ArrayList<ArrayList<Integer>> invertBoard(ArrayList<ArrayList<Integer>> temp){
 
         ArrayList<ArrayList<Integer>> invert = new ArrayList<>();
         for (int col = 0; col < temp.get(2).size(); col++){
@@ -300,7 +343,7 @@ public class ai {
         return invert;
     }
 
-    public static int findSmooth(List<List<Integer>> input){
+    public static  int findSmooth(ArrayList<ArrayList<Integer>> input){
         ArrayList<ArrayList<Integer>> evaluate;
         evaluate = invertBoard(input);
         int smooth =0;
@@ -328,7 +371,7 @@ public class ai {
     }
 
 
-    public static int findaggregateHeight(List<List<Integer>> Board){
+    public static  int findaggregateHeight(ArrayList<ArrayList<Integer>> Board){
         int count = 0;
 
         for (int row = 0; row < Board.size(); row++){
@@ -342,7 +385,7 @@ public class ai {
         return count;
     }
 
-    public static int findHoles( List<List<Integer>> Board){
+    public static  int findHoles( ArrayList<ArrayList<Integer>> Board){
 
         int holes = 0;
 
@@ -368,7 +411,7 @@ public class ai {
     }
 
 
-    public static int findComplete(List<List<Integer>> Board){
+    public static  int findComplete(ArrayList<ArrayList<Integer>> Board){
         int completedLines = 0;
 
 

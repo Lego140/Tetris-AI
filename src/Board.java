@@ -104,7 +104,7 @@ public class Board extends JPanel implements KeyListener
 
     public void setCurrentShape(){
         Rboard();
-        ai.curentBoard = Rboard;
+        //ai.curentBoard = Rboard;
 
         int ramdomShape = random.nextInt(shapes.length);
 
@@ -309,8 +309,6 @@ public class Board extends JPanel implements KeyListener
 
     public void Rboard(){
 
-
-
         for (int row = 0; row < board.length; row++){
             ArrayList<Integer> firstLayerData = new ArrayList<>();
             for (int col = 0; col < board[row].length; col++){
@@ -322,21 +320,12 @@ public class Board extends JPanel implements KeyListener
                 }
             }
             Rboard.set(row, firstLayerData);
-
-
         }
-
-
-
-
 
         for (int row = 0; row < Rboard.size(); row++){
             System.out.println(Rboard.get(row));
-
-
         }
         System.out.println("------------------------------");
-
 
     }
 
