@@ -2,7 +2,8 @@ import javax.swing.*;
 
 public class WindowGame {
     private JFrame window;
-    public static final int WIDTH = 445, HEIGHT = 692;
+    //    public static final int WIDTH = 445, HEIGHT = 692;
+    public static final int WIDTH = 500, HEIGHT = 692;
     private Board board;
     public WindowGame() {
         window = new JFrame("Tetris");

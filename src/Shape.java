@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.io.IOException;
 
 public class Shape {
     private int x = 4, y = 0;  // x is row y is colum
@@ -28,7 +29,7 @@ public class Shape {
         this.y = 0;
         collision = false;
     }
-    public void update(){
+    public void update() throws IOException {
 
 
         if(collision) {
@@ -43,6 +44,7 @@ public class Shape {
             checkLine();
                 //set curretn shape
             board.setCurrentShape();
+
 
             return;
         }

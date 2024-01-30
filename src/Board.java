@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -14,6 +16,9 @@ public class Board extends JPanel implements KeyListener
 {
    // public static ArrayList<ArrayList<ArrayList<Integer>>> everyPossibleMovesBoards = new ArrayList<>();
     public ArrayList<ArrayList<Integer>> temp = new ArrayList<>();
+    public int input;
+
+    public int [][] present = new int[20][10];
     public static int STATE_GAME_PLAY = 0;
     public static int STATE_GAME_Pause = 1;
     public static int STATE_GAME_OVER = 2;
@@ -29,6 +34,7 @@ public class Board extends JPanel implements KeyListener
     public static final int BOARD_WIDTH = 10; // 10 BLOCKS of 30x30
     public static final int BOARD_HEIGHT = 20; // 20 BLOCKS of 30x30
     public static final int BLOCK_SIZE = 30; //every block in the board is 30 x 30 pixels
+    public static String shapeName;
     private Random random;
 
 
@@ -36,6 +42,7 @@ public class Board extends JPanel implements KeyListener
     private Color[][] board = new Color[BOARD_HEIGHT][BOARD_WIDTH];
 
     private Shape[] shapes = new Shape[7];
+
     private Color[] colors = {Color.decode("#ed1c24"), Color.decode("#ff7f27"), Color.decode("#fff200"),
             Color.decode("#22b14c"), Color.decode("#00a2e8"), Color.decode("#a349a4"), Color.decode("#3f48cc")};
     private Shape currentShape;
@@ -80,29 +87,56 @@ public class Board extends JPanel implements KeyListener
                 {1, 1}, // O shape;
         }, this, colors[6]);
 
-        currentShape = shapes[random.nextInt(shapes.length)];
+        input = random.nextInt(shapes.length);
+        currentShape = shapes[input];
+
+
+
+
+
+
+
 
         looper = new Timer(delay, new ActionListener() {//half second delay
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                update();
+                try {
+                    update();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 repaint(); // redoes all of paintComponent
             }
         });
         looper.start(); // this will run action listener and will perform whats in actionPerformed but once every 500 milli so cant be faster
     }
 
-    private void update() {
+    private void update() throws IOException {
         if (state == STATE_GAME_PLAY){
             currentShape.update();
+
+            /*
+            Rboard();
+            int [][]inputBoard = new int[Rboard.size()][Rboard.get(0).size()];
+            for (int row =0; row<Rboard.size();row++){
+                for (int col = 0; col<Rboard.get(0).size();col++){
+                    inputBoard[row][col] = Rboard.get(row).get(col);
+                }
+            }
+            ai.startTest(inputShape, inputBoard);
+
+             */
+
+
+
         }
 
     }
 
 
 
-    public void setCurrentShape(){
+    public void setCurrentShape() throws IOException {
         Rboard();
         //ai.curentBoard = Rboard;
 
@@ -143,25 +177,65 @@ public class Board extends JPanel implements KeyListener
                 break;
         }
 
-        invertBoard();
+        //invertBoard();
 
-        System.out.println("height: "+findaggregateHeight()+"\nHoles: "+findHoles()+"\nsmooth: "+findSmooth()+"\ncomplete: "+findComplete()+"\nSCore: "+score());
+        //System.out.println("height: "+findaggregateHeight()+"\nHoles: "+findHoles()+"\nsmooth: "+findSmooth()+"\ncomplete: "+findComplete()+"\nSCore: "+score());
 
         currentShape.reset();
 
+        int [][]inputBoard = new int[Rboard.size()][Rboard.get(0).size()];
+        for (int row =0; row<Rboard.size();row++){
+            for (int col = 0; col<Rboard.get(0).size();col++){
+                inputBoard[row][col] = Rboard.get(row).get(col);
+            }
+        }
 
+        System.out.println(ramdomShape);
+
+        for (int row =0; row<Rboard.size();row++){
+            for (int col = 0; col<Rboard.get(0).size();col++){
+                present[row][col] = 0;
+            }
+        }
+
+        switch (ramdomShape){
+            case 0: int[][] inputShape = new int[][]{{1, 1, 1, 1}};        present = ai.getBestBoard(inputShape,inputBoard); break;
+            case 1: int[][] inputShape1 = new int[][]{{1, 1, 1}, {0, 1, 0}};present = ai.getBestBoard(inputShape1,inputBoard);break;
+            case 2: int[][] inputShape2 = new int[][]{{1, 1, 1}, {1, 0, 0}}; present = ai.getBestBoard(inputShape2,inputBoard);break;
+            case 3: int[][] inputShape3 = new int[][]{{1, 1, 1}, {0, 0, 1}}; present = ai.getBestBoard(inputShape3,inputBoard);break;
+            case 4: int[][] inputShape4 = new int[][]{{0, 1, 1}, {1, 1, 0}};   present = ai.getBestBoard(inputShape4,inputBoard);break;
+            case 5: int[][] inputShape5 = new int[][]{{1, 1, 0}, {0, 1, 1}};  present = ai.getBestBoard(inputShape5,inputBoard);break;
+            case 6: int[][] inputShape6 = new int[][]{{1, 1}, {1, 1}};    present = ai.getBestBoard(inputShape6,inputBoard);break;
+        }
+
+        /*
+                switch (ramdomShape){
+            case 0: int[][] inputShape = new int[][]{{1, 1, 1, 1}};        ai.startTest(inputShape, inputBoard); present = ai.getBestBoard(inputShape,inputBoard); break;
+            case 1: int[][] inputShape1 = new int[][]{{1, 1, 1}, {0, 1, 0}};        ai.startTest(inputShape1, inputBoard);present = ai.getBestBoard(inputShape1,inputBoard);break;
+            case 2: int[][] inputShape2 = new int[][]{{1, 1, 1}, {1, 0, 0}};        ai.startTest(inputShape2, inputBoard);present = ai.getBestBoard(inputShape2,inputBoard);break;
+            case 3: int[][] inputShape3 = new int[][]{{1, 1, 1}, {0, 0, 1}};        ai.startTest(inputShape3, inputBoard);present = ai.getBestBoard(inputShape3,inputBoard);break;
+            case 4: int[][] inputShape4 = new int[][]{{0, 1, 1}, {1, 1, 0}};        ai.startTest(inputShape4, inputBoard);present = ai.getBestBoard(inputShape4,inputBoard);break;
+            case 5: int[][] inputShape5 = new int[][]{{1, 1, 0}, {0, 1, 1}};        ai.startTest(inputShape5, inputBoard);present = ai.getBestBoard(inputShape5,inputBoard);break;
+            case 6: int[][] inputShape6 = new int[][]{{1, 1}, {1, 1}};        ai.startTest(inputShape6, inputBoard);present = ai.getBestBoard(inputShape6,inputBoard);break;
+        }
+
+         */
+
+
+       // ai.startTest(inputShape, inputBoard);
 
 
         checkOverGame();
     }
 
-    private void checkOverGame(){
+    private void checkOverGame() throws IOException {
         int[][] coords = currentShape.getCoords();
         for(int row = 0; row < coords.length;row++){
             for(int col =0; col < coords[0].length;col++){
                 if (coords[row][col]!= 0){
                     if (board[row + currentShape.getY()] [col + currentShape.getX()] != null){
                         //System.out.println("game over");
+                        HighScore.writeScore(score);
                         state = STATE_GAME_OVER;
                         /*
                         for(int i =0;i<everyPossibleMovesBoards.size();i++){
@@ -233,7 +307,59 @@ public class Board extends JPanel implements KeyListener
         }
 
         g.drawString(("Score: "+String.valueOf(score)), 320,200);
+        g.drawString(("Best Move"), 320,235);
+        g.drawString(("Holes: "+ai.findHoles(present)), 320,550);
+        g.drawString(("Height: "+ai.findaggregateHeight(present)), 320,560);
+        g.drawString(("Smoothness: "+ai.findSmooth(present)), 320,570);
+        g.drawString(("Completed Lines: "+ai.findComplete(present)), 320,580);
 
+
+
+        try {
+            g.drawString(("High Score: "+String.valueOf(HighScore.findHighScore())), 320,220);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
+        g.setColor(Color.BLACK); //make what ever is next black
+        //g.fillRect(0,0,getWidth(),getHeight()); // fills whole gui with black
+
+
+        int BLOCK_SIZE2 = 15; //every block in the board is 30 x 30 pixels
+
+
+        //draws pieces on to the board
+        for (int row = 0; row < board.length; row++){
+            for (int col = 0; col < board[row].length; col++){
+
+
+                if (present[row][col] != 0){
+                    if (present[row][col]==1){
+                        g.setColor(Color.BLUE);
+                    }
+                    if (present[row][col]==2){
+                        g.setColor(Color.YELLOW);
+                    }
+
+                    g.fillRect((col* BLOCK_SIZE2)+320, (row*BLOCK_SIZE2)+240, BLOCK_SIZE2,BLOCK_SIZE2);
+                }
+
+
+            }
+        }
+
+
+
+        //draws Board
+        g.setColor(Color.WHITE);
+        for (int row = 0; row< BOARD_HEIGHT+1; row++){ //draws the row lines
+            g.drawLine(320,(BLOCK_SIZE2*row)+240,(BLOCK_SIZE2 * BOARD_WIDTH)+320,(row*BLOCK_SIZE2)+240);
+        }
+        for (int col = 0; col< BOARD_WIDTH+1; col++){ //draws the colum lines
+            g.drawLine((col*BLOCK_SIZE2)+320,240,(col*BLOCK_SIZE2)+320,(BLOCK_SIZE2*BOARD_HEIGHT)+240);
+        }
 
     }
     public Color[][] getBoard(){
@@ -267,7 +393,11 @@ public class Board extends JPanel implements KeyListener
                         board[row][col] = null;
                     }
                 }
-                setCurrentShape();
+                try {
+                    setCurrentShape();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 score = 0;
                 state = STATE_GAME_PLAY;
             }
@@ -308,7 +438,7 @@ public class Board extends JPanel implements KeyListener
 
 
     public void Rboard(){
-
+        Rboard.clear();
         for (int row = 0; row < board.length; row++){
             ArrayList<Integer> firstLayerData = new ArrayList<>();
             for (int col = 0; col < board[row].length; col++){
@@ -319,13 +449,13 @@ public class Board extends JPanel implements KeyListener
                     firstLayerData.add(0);
                 }
             }
-            Rboard.set(row, firstLayerData);
+            Rboard.add(firstLayerData);
         }
 
         for (int row = 0; row < Rboard.size(); row++){
-            System.out.println(Rboard.get(row));
+            //System.out.println(Rboard.get(row));
         }
-        System.out.println("------------------------------");
+        //System.out.println("------------------------------");
 
     }
 
@@ -350,137 +480,14 @@ public class Board extends JPanel implements KeyListener
 
 
         for (int row = 0; row < Rboard.size(); row++){
-            System.out.println(Rboard.get(row));
+            //System.out.println(Rboard.get(row));
 
 
         }
-        System.out.println("------------------------------");
+        //System.out.println("------------------------------");
 
 
     }
-
-    public void invertBoard(){
-
-        temp.clear();
-
-
-        for (int col = 0; col < Rboard.get(2).size(); col++){
-            ArrayList<Integer> temp1d = new ArrayList<>();
-            temp1d.clear();
-            for(int row = Rboard.size()-1; row > -1;row--){
-                temp1d.add(Rboard.get(row).get(col));
-            }
-            temp.add(temp1d);
-        }
-
-        for(int i =0; i < temp.size();i++){
-            System.out.println(temp.get(i));
-        }
-    }
-
-    public int findSmooth(){
-
-        int smooth =0;
-
-        stop:
-        for(int line = 0; line < temp.size();line++){
-            int height1 =0;
-            int height2=0;
-
-            for(int single=0; single < temp.get(2).size();single++){
-
-                if(line+1==temp.size()){
-                    break stop;
-                }
-
-                if(temp.get(line).get(single)==1){
-                    height1 = single;
-                }
-                if(temp.get(line+1).get(single)==1){
-                    height2 = single;
-                }
-            }
-            smooth = smooth+(abs(height1-height2));
-
-        }
-
-        return smooth;
-
-    }
-
-
-
-    public int findHoles(){
-
-        int holes = 0;
-
-
-        for(int line = 0; line < temp.size();line++){
-            int track =0;
-            for(int single=0; single < temp.get(2).size();single++){
-
-
-                if(temp.get(line).get(single)==1){
-                    track = single;
-                }
-
-
-
-            }
-            for(int find = 0; find < track;find++){
-                if(temp.get(line).get(find)==0){
-                    holes++;
-                }
-            }
-
-        }
-
-
-
-        return holes;
-
-    }
-
-    public int rateMove(int holes, int smooth, int aggregateHeight, int completedLines){
-        int rating = 0;
-
-
-
-
-        return rating;
-    }
-
-
-    public int findComplete(){
-        int completedLines = 0;
-
-        for(int single=0; single < temp.get(2).size();single++){
-            int count =0;
-
-            for(int line = 0; line < temp.size();line++){
-
-
-                if (temp.get(line).get(single)==1){
-                    count++;
-                }
-
-
-            }
-            if(count == 10){
-                completedLines++;
-            }
-        }
-        return completedLines;
-    }
-
-    public double score(){
-        double score = -0.510066*findaggregateHeight()+0.760666*findComplete()-0.35663*findHoles()-0.184483*findSmooth();
-        return score;
-
-    }
-
-
-
 
 
 }

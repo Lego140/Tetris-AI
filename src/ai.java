@@ -56,8 +56,9 @@ public class ai {
             }
         }
     }
-    public static void startTest(int [][]curentShape, int [][]testBoard, String shapeName){
+    public static void startTest(int [][] curentShape, int [][] testBoard){
 
+        /*
         int rotates =0;
 
         switch (shapeName){
@@ -68,6 +69,8 @@ public class ai {
             case "I": rotates=1; break;
             default: rotates=0;break;
         }
+
+         */
 
         printArray(getBestBoard(curentShape,testBoard));
 
@@ -122,8 +125,6 @@ public class ai {
 
 
     public static int [][] placeShape(int[][] shape, int [][] array, int x, int y) {
-
-
 
 
 
@@ -242,47 +243,47 @@ public class ai {
             for (int x = 0; x < aftercurent[0].length; x++) {
 
 
-                if (canPlaceShape(shape, testBoard, x, y) == true) {
+                if (canPlaceShape(shape, aftercurent, x, y) == true) {
                     //double score = (findSmooth(placeShape(shape, aftercurentBoard, x, y))*-0.184483)+(findHoles(placeShape(shape,aftercurentBoard,x,y))*-0.35663)+(findaggregateHeight(placeShape(shape,aftercurentBoard,x,y))*-0.510066)+(findComplete(placeShape(shape,aftercurentBoard,x,y))*0.760666);
-                    System.out.println("(" + x + ", " + y + "valid");
+                    //System.out.println("(" + x + ", " + y + "valid");
                     X.add(x);
                     Y.add(y);
 
                 } else {
-                    System.out.println("(" + x + ", " + y + ") not valid");
+                    //System.out.println("(" + x + ", " + y + ") not valid");
                 }
             }
         }
 
 
-        System.out.println(X+"\n"+Y);
-        ArrayList<ArrayList<Integer>> best = new ArrayList<>();
+        //System.out.println(X+"\n"+Y);
+        //ArrayList<ArrayList<Integer>> best = new ArrayList<>();
 
         int Bestx =0;
         int Besty =0;
         //final ArrayList<ArrayList<Integer>> keep = aftercurentBoard;
-        ArrayList<ArrayList<Integer>> placedBoard2 = new ArrayList<>();
+        //ArrayList<ArrayList<Integer>> placedBoard2 = new ArrayList<>();
         //copyArray(placedBoard1, placeShape(shape,aftercurentBoard,X.get(0),Y.get(0)));
 
         //copyArray(keep,aftercurentBoard);
-        printArray(testBoard);
-        int [][]save = testBoard;
+        //printArray(testBoard);
+        //int [][]save = testBoard;
         for(int x=0;x<X.size();x++){
 
 
-            if (bestScore<rateBoard(placeShape(shape,testBoard,X.get(x),Y.get(x)))){
-
-                best.clear();
+            if (bestScore<rateBoard(placeShape(shape,aftercurent,X.get(x),Y.get(x)))){
+                //removeShape(shape,aftercurent,X.get(x),Y.get(x));
+                //best.clear();
                 Bestx = X.get(x);
                 Besty = Y.get(x);
-                bestScore = rateBoard(placeShape(shape,testBoard,X.get(x),Y.get(x)));
-
+                bestScore = rateBoard(placeShape(shape,aftercurent,Bestx,Besty));
+                //removeShape(shape,aftercurent,X.get(x),Y.get(x));
             }
 
 
 
-            printArray(placeShape(shape,aftercurent,X.get(x),Y.get(x)));
-            System.out.println(rateBoard(placeShape(shape,aftercurent,X.get(x),Y.get(x))));
+            //printArray(placeShape(shape,aftercurent,X.get(x),Y.get(x)));
+            //System.out.println(rateBoard(placeShape(shape,aftercurent,X.get(x),Y.get(x))));
             removeShape(shape,aftercurent,X.get(x),Y.get(x));
 
             /*
@@ -291,7 +292,7 @@ public class ai {
             }
 
              */
-            System.out.println("----------------------");
+            //System.out.println("----------------------");
 
 
         }
@@ -301,24 +302,22 @@ public class ai {
         }
 
          */
-        System.out.println(bestScore+"\nY: "+Besty+"\nX: "+Bestx);
+        //System.out.println(bestScore+"\nY: "+Besty+"\nX: "+Bestx);
         //System.out.println(placeShape(shape,curentBoard,Bestx,Besty));
-
-        return placeShape(shape,testBoard,Bestx,Besty);
+        //System.out.println("-------------------------------------");
+        //System.out.println(bestScore);
+        return placeShape(shape,aftercurent,Bestx,Besty);
     }
 
+
+
+
+
+
     public static double rateBoard(int [][]testBoard){
-        ArrayList<ArrayList<Integer>> board= new ArrayList<>();
-        for(int x=0;x<testBoard.length;x++){
-            ArrayList<Integer> firstLayer = new ArrayList<>();
-            for(int y =0; y<testBoard[x].length;y++){
-                firstLayer.add(testBoard[x][y]);
-            }
-            board.add(firstLayer);
-        }
 
-
-        double score = (findSmooth(board)*-0.184483)+(findaggregateHeight(board)*-0.510066)+(findHoles(board)*-0.35663)+(findComplete(board)*0.760666);
+        double score = (findSmooth(testBoard)*-0.184483)+(findaggregateHeight(testBoard)*-0.510066)+(findHoles(testBoard)*-0.35663)+(findComplete(testBoard)*0.760666);
+        //double score = (findSmooth(board)*-2.184483)+(findaggregateHeight(board)*-0.510066)+(findHoles(board)*-3.35663)+(findComplete(board)*10.760666);
         return score;
     }
 
@@ -343,9 +342,19 @@ public class ai {
         return invert;
     }
 
-    public static  int findSmooth(ArrayList<ArrayList<Integer>> input){
-        ArrayList<ArrayList<Integer>> evaluate;
-        evaluate = invertBoard(input);
+    public static  int findSmooth(int [][] input1){
+
+        ArrayList<ArrayList<Integer>> evaluate = new ArrayList<>();
+        for (int row=0; row<input1.length;row++){
+            ArrayList<Integer> firstLayer = new ArrayList<>();
+            for (int col=0; col< input1[0].length;col++){
+                firstLayer.add(input1[row][col]);
+            }
+            evaluate.add(firstLayer);
+            //System.out.println(firstLayer);
+        }
+
+        evaluate = invertBoard(evaluate);
         int smooth =0;
 
         stop:
@@ -371,12 +380,13 @@ public class ai {
     }
 
 
-    public static  int findaggregateHeight(ArrayList<ArrayList<Integer>> Board){
+    public static  int findaggregateHeight(int[][] Board){
+
         int count = 0;
 
-        for (int row = 0; row < Board.size(); row++){
-            for (int col = 0; col < Board.get(row).size(); col++){
-                if ((Board.get(row).get(col) == 1)||(Board.get(row).get(col) == 2)){
+        for (int row = 0; row < Board.length; row++){
+            for (int col = 0; col < Board[0].length; col++){
+                if ((Board[row][col] == 1)||(Board[row][col] == 2)){
                     count++;
                 }
             }
@@ -385,24 +395,39 @@ public class ai {
         return count;
     }
 
-    public static  int findHoles( ArrayList<ArrayList<Integer>> Board){
+    public static  int findHoles( int[][]input1){
+
+        ArrayList<ArrayList<Integer>> Board = new ArrayList<>();
+        for (int row=0; row<input1.length;row++){
+            ArrayList<Integer> firstLayer = new ArrayList<>();
+            for (int col=0; col< input1[0].length;col++){
+                firstLayer.add(input1[row][col]);
+            }
+            Board.add(firstLayer);
+            //System.out.println(firstLayer);
+        }
+
 
         int holes = 0;
 
-
-        for(int line = 0; line < Board.size();line++){
+        for(int line = 0; line < Board.get(0).size();line++){
             int track =0;
-            for(int single=0; single < Board.get(2).size();single++){
+            for(int row=Board.size()-1; row >= 0;row--){
+                if((Board.get(row).get(line)==1)||(Board.get(row).get(line)==2)){
+                    track = row;
 
-
-                if((Board.get(line).get(single)==1)||(Board.get(line).get(single)==2)){
-                    track = single;
                 }
 
+
             }
-            for(int find = 0; find < track;find++){
-                if(Board.get(line).get(find)==0){
-                    holes++;
+
+            //System.out.println("col: "+line+"\nrow: "+track);
+
+            if(track!=0) {
+                for (int find = Board.size()-1; find >= track; find--) {
+                    if (Board.get(find).get(line) == 0) {
+                        holes++;
+                    }
                 }
             }
 
@@ -411,14 +436,14 @@ public class ai {
     }
 
 
-    public static  int findComplete(ArrayList<ArrayList<Integer>> Board){
+    public static  int findComplete(int[][]Board){
         int completedLines = 0;
 
 
-        for(int line = 0; line < Board.size();line++){
+        for(int line = 0; line < Board.length;line++){
             int count =0;
-            for(int single=0; single < Board.get(line).size();single++){
-                if (Board.get(line).get(single)!=0){
+            for(int single=0; single < Board[0].length;single++){
+                if (Board[line][single]!=0){
                     count++;
                 }
             }
