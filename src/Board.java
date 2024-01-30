@@ -190,7 +190,7 @@ public class Board extends JPanel implements KeyListener
             }
         }
 
-        System.out.println(ramdomShape);
+        //System.out.println(ramdomShape);
 
         for (int row =0; row<Rboard.size();row++){
             for (int col = 0; col<Rboard.get(0).size();col++){
@@ -199,13 +199,13 @@ public class Board extends JPanel implements KeyListener
         }
 
         switch (ramdomShape){
-            case 0: int[][] inputShape = new int[][]{{1, 1, 1, 1}};        present = ai.getBestBoard(inputShape,inputBoard); break;
-            case 1: int[][] inputShape1 = new int[][]{{1, 1, 1}, {0, 1, 0}};present = ai.getBestBoard(inputShape1,inputBoard);break;
-            case 2: int[][] inputShape2 = new int[][]{{1, 1, 1}, {1, 0, 0}}; present = ai.getBestBoard(inputShape2,inputBoard);break;
-            case 3: int[][] inputShape3 = new int[][]{{1, 1, 1}, {0, 0, 1}}; present = ai.getBestBoard(inputShape3,inputBoard);break;
-            case 4: int[][] inputShape4 = new int[][]{{0, 1, 1}, {1, 1, 0}};   present = ai.getBestBoard(inputShape4,inputBoard);break;
-            case 5: int[][] inputShape5 = new int[][]{{1, 1, 0}, {0, 1, 1}};  present = ai.getBestBoard(inputShape5,inputBoard);break;
-            case 6: int[][] inputShape6 = new int[][]{{1, 1}, {1, 1}};    present = ai.getBestBoard(inputShape6,inputBoard);break;
+            case 0: int[][] inputShape = new int[][]{{1, 1, 1, 1}};        present = ai.getBestBoard(inputShape,inputBoard,"I"); break;
+            case 1: int[][] inputShape1 = new int[][]{{1, 1, 1}, {0, 1, 0}};present = ai.getBestBoard(inputShape1,inputBoard,"T");break;
+            case 2: int[][] inputShape2 = new int[][]{{1, 1, 1}, {1, 0, 0}}; present = ai.getBestBoard(inputShape2,inputBoard,"L");break;
+            case 3: int[][] inputShape3 = new int[][]{{1, 1, 1}, {0, 0, 1}}; present = ai.getBestBoard(inputShape3,inputBoard,"J");break;
+            case 4: int[][] inputShape4 = new int[][]{{0, 1, 1}, {1, 1, 0}};   present = ai.getBestBoard(inputShape4,inputBoard,"S");break;
+            case 5: int[][] inputShape5 = new int[][]{{1, 1, 0}, {0, 1, 1}};  present = ai.getBestBoard(inputShape5,inputBoard,"Z");break;
+            case 6: int[][] inputShape6 = new int[][]{{1, 1}, {1, 1}};    present = ai.getBestBoard(inputShape6,inputBoard,"O");break;
         }
 
         /*
@@ -291,12 +291,8 @@ public class Board extends JPanel implements KeyListener
             g.drawLine(col*BLOCK_SIZE,0,col*BLOCK_SIZE,BLOCK_SIZE*BOARD_HEIGHT);
         }
         if(state == STATE_GAME_OVER){
-            g.setColor(Color.red);
-            Font stringFont = new Font( "SansSerif", Font.PLAIN, 70 );
-            g.setFont(stringFont);
-            g.setColor(Color.gray);
-            g.drawString("GAME OVER", 10, 200);
-            stringFont = new Font( "SansSerif", Font.PLAIN, 69 );
+
+            Font stringFont = new Font( "SansSerif", Font.PLAIN, 69 );
             g.setFont(stringFont);
             g.setColor(Color.red);
             g.drawString("GAME OVER", 11, 200);
@@ -305,18 +301,42 @@ public class Board extends JPanel implements KeyListener
 
 
         }
+        Font stringFont1 = new Font( "SansSerif", Font.PLAIN, 25 );
+        g.setFont(stringFont1);
+        g.setColor(Color.white);
+        g.drawString("Controls",320,20);
+        g.fillRect(320, 25, 40,40);
+        g.fillRect(320, 75, 40,40);
+        g.fillRect(320, 125, 80,40);
 
-        g.drawString(("Score: "+String.valueOf(score)), 320,200);
-        g.drawString(("Best Move"), 320,235);
-        g.drawString(("Holes: "+ai.findHoles(present)), 320,550);
-        g.drawString(("Height: "+ai.findaggregateHeight(present)), 320,560);
-        g.drawString(("Smoothness: "+ai.findSmooth(present)), 320,570);
-        g.drawString(("Completed Lines: "+ai.findComplete(present)), 320,580);
+        Font stringFont2 = new Font( "SansSerif", Font.BOLD, 15 );
+        g.setFont(stringFont2);
+        g.setColor(Color.black);
+        g.drawString("A",335,50);
+        g.drawString("D",335,100);
+        g.drawString("SPACE",335,150);
+
+        g.setColor(Color.white);
+        g.drawString("Move Left",370,50);
+        g.drawString("Move Right",370,100);
+        g.drawString("Fast Drop",410,150);
+
+        Font stringFont = new Font( "SansSerif", Font.PLAIN, 15 );
+        g.setFont(stringFont);
+        g.setColor(Color.white);
+        g.drawString(("Score: "+String.valueOf(score)), 320,210);
+        g.drawString(("Best Move"), 320,237);
+        g.drawString(("Holes: "+ai.findHoles(present)), 320,555);
+        g.drawString(("Height: "+ai.findaggregateHeight(present)), 320,570);
+        g.drawString(("Smoothness: "+ai.findSmooth(present)), 320,585);
+        g.drawString(("Completed Lines: "+ai.findComplete(present)), 320,600);
+
+
 
 
 
         try {
-            g.drawString(("High Score: "+String.valueOf(HighScore.findHighScore())), 320,220);
+            g.drawString(("High Score: "+String.valueOf(HighScore.findHighScore())), 320,225);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -345,6 +365,16 @@ public class Board extends JPanel implements KeyListener
 
                     g.fillRect((col* BLOCK_SIZE2)+320, (row*BLOCK_SIZE2)+240, BLOCK_SIZE2,BLOCK_SIZE2);
                 }
+
+                /*
+                if (present[row][col]==0){
+                    g.setColor(Color.BLACK);
+                    g.fillRect((col* BLOCK_SIZE2)+320, (row*BLOCK_SIZE2)+240, BLOCK_SIZE2,BLOCK_SIZE2);
+                }
+
+                 */
+
+
 
 
             }

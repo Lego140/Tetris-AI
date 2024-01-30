@@ -72,7 +72,7 @@ public class ai {
 
          */
 
-        printArray(getBestBoard(curentShape,testBoard));
+        //printArray(getBestBoard(curentShape,testBoard));
 
     }
 
@@ -126,7 +126,7 @@ public class ai {
 
     public static int [][] placeShape(int[][] shape, int [][] array, int x, int y) {
 
-
+        int [][] sub = array;
 
             // Copy the shape into the board at the specified position.
         for (int i = 0; i < shape.length; i++) {
@@ -134,7 +134,8 @@ public class ai {
                 if (shape[i][j] == 1) {
                     //temp.get(y + i).set(x + j, 2); //replaces the value at that x and y as 1 for placing the shape
                     //array.get(y+i).set(x+j, 2);
-                    array[(y+i)][(x+j)] =2;
+                    sub[(y+i)][(x+j)] =2;
+
 
                 }
             }
@@ -143,11 +144,14 @@ public class ai {
             //System.out.println("---------------------------------");
 
         }
-        return array;
+
+        return sub;
 
     }
 
-    public static void removeShape(int[][] shape, int [][] array, int x, int y){
+    public static int[][] removeShape(int[][] shape, int [][] array, int x, int y){
+
+
         for (int i = 0; i < shape.length; i++) {
             for (int j = 0; j < shape[0].length; j++) {
                 if (shape[i][j] == 1) {
@@ -162,6 +166,8 @@ public class ai {
             //System.out.println("---------------------------------");
 
         }
+
+        return array;
     }
 
 
@@ -232,81 +238,122 @@ public class ai {
         return matrix;
     }
 
-    public static int[][] getBestBoard(int[][] shape, int[][] aftercurent) {
+    public static int[][] rotate(final int[][] shape, int rotations){
 
 
+
+        if (rotations==0){
+            return shape;
+        }
+        int[][] rotatedShape = shape;
+        if (rotations==2){
+            rotatedShape = transposeMatrix(rotatedShape);
+            rotatedShape= reverseRows(rotatedShape);
+            rotatedShape = transposeMatrix(rotatedShape);
+            rotatedShape= reverseRows(rotatedShape);
+        }
+        if (rotations==1){
+            rotatedShape = transposeMatrix(rotatedShape);
+            rotatedShape= reverseRows(rotatedShape);
+
+        }
+        if (rotations==3){
+            rotatedShape = transposeMatrix(rotatedShape);
+            rotatedShape= reverseRows(rotatedShape);
+            rotatedShape = transposeMatrix(rotatedShape);
+            rotatedShape= reverseRows(rotatedShape);
+            rotatedShape = transposeMatrix(rotatedShape);
+            rotatedShape= reverseRows(rotatedShape);
+        }
+
+
+        //System.out.println(rotatedShape.length+" "+rotatedShape[0].length);
+
+        //printArray(shape);
+        return rotatedShape;
+    }
+
+    public static int[][] getBestBoard(int[][] shape, int[][] aftercurent, String shapeName) {
+        int [][] bestBoard = new int[20][10];
+        int rotations = 1;
+
+        int [][]bestShape = shape;
+
+        int Bestx = 0;
+        int Besty = 0;
+
+        switch (shapeName){
+            case "T": rotations =4;break;
+            case "L": rotations = 4;break;
+            case "Z": rotations=2; break;
+            case "S": rotations=2; break;
+            case "I": rotations=2; break;
+            case "J": rotations=4; break;
+            default: rotations =1;break;
+        }
         double bestScore = -5764767487593567898765678765678976547985789346634756778457543.3;
-        ArrayList<Integer> X = new ArrayList<>();
-        ArrayList<Integer> Y = new ArrayList<>();
+        while (rotations>0) {
 
-        for (int y = 0; y < aftercurent.length; y++) {
-            for (int x = 0; x < aftercurent[0].length; x++) {
+            ArrayList<Integer> X = new ArrayList<>();
+            ArrayList<Integer> Y = new ArrayList<>();
+
+            for (int y = 0; y < aftercurent.length; y++) {
+                for (int x = 0; x < aftercurent[0].length; x++) {
 
 
-                if (canPlaceShape(shape, aftercurent, x, y) == true) {
-                    //double score = (findSmooth(placeShape(shape, aftercurentBoard, x, y))*-0.184483)+(findHoles(placeShape(shape,aftercurentBoard,x,y))*-0.35663)+(findaggregateHeight(placeShape(shape,aftercurentBoard,x,y))*-0.510066)+(findComplete(placeShape(shape,aftercurentBoard,x,y))*0.760666);
-                    //System.out.println("(" + x + ", " + y + "valid");
-                    X.add(x);
-                    Y.add(y);
+                    if (canPlaceShape(shape, aftercurent, x, y) == true) {
+                        X.add(x);
+                        Y.add(y);
 
-                } else {
-                    //System.out.println("(" + x + ", " + y + ") not valid");
+                    }
                 }
             }
-        }
+            //System.out.println(X+" "+Y);
 
 
-        //System.out.println(X+"\n"+Y);
-        //ArrayList<ArrayList<Integer>> best = new ArrayList<>();
-
-        int Bestx =0;
-        int Besty =0;
-        //final ArrayList<ArrayList<Integer>> keep = aftercurentBoard;
-        //ArrayList<ArrayList<Integer>> placedBoard2 = new ArrayList<>();
-        //copyArray(placedBoard1, placeShape(shape,aftercurentBoard,X.get(0),Y.get(0)));
-
-        //copyArray(keep,aftercurentBoard);
-        //printArray(testBoard);
-        //int [][]save = testBoard;
-        for(int x=0;x<X.size();x++){
 
 
-            if (bestScore<rateBoard(placeShape(shape,aftercurent,X.get(x),Y.get(x)))){
-                //removeShape(shape,aftercurent,X.get(x),Y.get(x));
-                //best.clear();
-                Bestx = X.get(x);
-                Besty = Y.get(x);
-                bestScore = rateBoard(placeShape(shape,aftercurent,Bestx,Besty));
-                //removeShape(shape,aftercurent,X.get(x),Y.get(x));
+            for (int x = 0; x < X.size(); x++) {
+
+
+
+                if (bestScore < rateBoard(placeShape(shape, aftercurent, X.get(x), Y.get(x)))) {
+                    //aftercurent =  removeShape(bestShape, aftercurent, Bestx, Besty);
+                    //aftercurent=  removeShape(shape,aftercurent,X.get(x),Y.get(x));
+                    bestShape = shape;
+                    //best.clear();
+                    Bestx = X.get(x);
+                    Besty = Y.get(x);
+                    bestScore = rateBoard(placeShape(shape, aftercurent, X.get(x), Y.get(x)));
+                    //aftercurent =  removeShape(shape,aftercurent,X.get(x),Y.get(x));
+                }
+
+                aftercurent = removeShape(shape, aftercurent, X.get(x), Y.get(x));
+
+
+            }
+           //System.out.println(Bestx+" "+Besty);
+
+            //printArray(aftercurent);
+            //System.out.println("-----------------------------");
+
+            //aftercurent =  removeShape(shape, aftercurent, Bestx, Besty);
+            //printArray(shape);
+            //placeShape(bestShape, aftercurent, Bestx, Besty);
+
+
+            //aftercurent =  removeShape(shape, aftercurent, Bestx, Besty);
+            if (rotations>=0){
+                shape = rotate(shape);
+                rotations--;
             }
 
 
-
-            //printArray(placeShape(shape,aftercurent,X.get(x),Y.get(x)));
-            //System.out.println(rateBoard(placeShape(shape,aftercurent,X.get(x),Y.get(x))));
-            removeShape(shape,aftercurent,X.get(x),Y.get(x));
-
-            /*
-            for (int i=0;i<aftercurent.size();i++){
-                System.out.println(testBoard);
-            }
-
-             */
-            //System.out.println("----------------------");
-
-
         }
-        /*
-        for (int i=0;i<aftercurentBoard.size();i++){
-            System.out.println(aftercurentBoard.get(i));
-        }
-
-         */
-        //System.out.println(bestScore+"\nY: "+Besty+"\nX: "+Bestx);
-        //System.out.println(placeShape(shape,curentBoard,Bestx,Besty));
-        //System.out.println("-------------------------------------");
         //System.out.println(bestScore);
-        return placeShape(shape,aftercurent,Bestx,Besty);
+
+        //printArray(bestBoard);
+        return placeShape(bestShape, aftercurent, Bestx, Besty);
     }
 
 
@@ -318,6 +365,7 @@ public class ai {
 
         double score = (findSmooth(testBoard)*-0.184483)+(findaggregateHeight(testBoard)*-0.510066)+(findHoles(testBoard)*-0.35663)+(findComplete(testBoard)*0.760666);
         //double score = (findSmooth(board)*-2.184483)+(findaggregateHeight(board)*-0.510066)+(findHoles(board)*-3.35663)+(findComplete(board)*10.760666);
+
         return score;
     }
 
