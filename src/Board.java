@@ -307,19 +307,22 @@ public class Board extends JPanel implements KeyListener
         g.drawString("Controls",320,20);
         g.fillRect(320, 25, 40,40);
         g.fillRect(320, 75, 40,40);
-        g.fillRect(320, 125, 80,40);
+        g.fillRect(320, 125, 40,40);
+        g.fillRect(320, 172, 80,40);
 
         Font stringFont2 = new Font( "SansSerif", Font.BOLD, 15 );
         g.setFont(stringFont2);
         g.setColor(Color.black);
         g.drawString("A",335,50);
         g.drawString("D",335,100);
-        g.drawString("SPACE",335,150);
+        g.drawString("W",335,150);
+        g.drawString("SPACE",335,197);
 
         g.setColor(Color.white);
         g.drawString("Move Left",370,50);
         g.drawString("Move Right",370,100);
-        g.drawString("Fast Drop",410,150);
+        g.drawString("Rotate",370,150);
+        g.drawString("Fast Drop",410,197);
 
         Font stringFont = new Font( "SansSerif", Font.PLAIN, 15 );
         g.setFont(stringFont);
