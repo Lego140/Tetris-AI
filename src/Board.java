@@ -324,16 +324,20 @@ public class Board extends JPanel implements KeyListener
         g.drawString("Rotate",370,150);
         g.drawString("Fast Drop",410,197);
 
+        Font stringFont3 = new Font( "SansSerif", Font.BOLD, 30 );
+        g.setFont(stringFont3);
+        g.setColor(Color.white);
+        g.drawString(("Score: "+String.valueOf(score)), 10,640);
+
         Font stringFont = new Font( "SansSerif", Font.PLAIN, 15 );
         g.setFont(stringFont);
         g.setColor(Color.white);
-        g.drawString(("Score: "+String.valueOf(score)), 320,210);
+
         g.drawString(("Best Move"), 320,237);
         g.drawString(("Holes: "+ai.findHoles(present)), 320,555);
         g.drawString(("Height: "+ai.findaggregateHeight(present)), 320,570);
         g.drawString(("Smoothness: "+ai.findSmooth(present)), 320,585);
         g.drawString(("Completed Lines: "+ai.findComplete(present)), 320,600);
-
 
 
 

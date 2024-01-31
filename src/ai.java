@@ -363,7 +363,7 @@ public class ai {
 
     public static double rateBoard(int [][]testBoard){
 
-        double score = (findSmooth(testBoard)*-0.184483)+(findaggregateHeight(testBoard)*-0.510066)+(findHoles(testBoard)*-0.35663)+(findComplete(testBoard)*0.760666);
+        double score = (findSmooth(testBoard)*-0.184483)+(findaggregateHeight(testBoard)*-0.35663)+(findHoles(testBoard)*-0.510066)+(findComplete(testBoard)*0.760666);
         //double score = (findSmooth(board)*-2.184483)+(findaggregateHeight(board)*-0.510066)+(findHoles(board)*-3.35663)+(findComplete(board)*10.760666);
 
         return score;
